@@ -21,9 +21,8 @@ public class ObstacleSpawner : MonoBehaviour
     public float spawnInterval = 3f;
     public float warningDelay = 0.8f;
     public float spawnHeight = 2f;
-    public float flySpeed = 3f;
+    public float flySpeed = 2f;
 
-    public AudioSource audioSource;
     public ObstacleData[] obstacles;
 
     private void Start()
@@ -38,52 +37,67 @@ public class ObstacleSpawner : MonoBehaviour
 
     private IEnumerator SpawnSequence()
     {
-        ObstacleData selected =
-            obstacles[Random.Range(0, obstacles.Length)];
+        ObstacleData selected = obstacles[Random.Range(0, obstacles.Length)];
 
-        if (audioSource != null && selected.warningSound != null)
-        {
-            audioSource.PlayOneShot(selected.warningSound);
-        }
+        Vector3 spawnPos = GetSpawnPosition(selected);
+
+        PlayWarningSound(selected.warningSound, spawnPos);
 
         yield return new WaitForSeconds(warningDelay);
 
-        SpawnObstacle(selected);
+        SpawnObstacle(selected, spawnPos);
     }
 
-    private void SpawnObstacle(ObstacleData obstacleData)
+    private Vector3 GetSpawnPosition(ObstacleData obstacleData)
     {
-        Vector3 spawnPos = target.position;
-
         if (obstacleData.obstacleType == ObstacleType.Falling)
         {
-            // 화분: 머리 위에서 낙하
-            spawnPos += new Vector3(
+            return target.position + new Vector3(
                 Random.Range(-0.4f, 0.4f),
                 spawnHeight,
                 Random.Range(-0.2f, 0.2f)
             );
         }
-        else
-        {
-            // 새/드론: 플레이어 뒤에서 생성
-            Vector3 behindDirection = -target.forward;
 
-            spawnPos = target.position
-                + behindDirection * 2.5f
-                + new Vector3(
-                    Random.Range(-0.5f, 0.5f),
-                    Random.Range(0f, 0.7f),
-                    0f
-                );
-        }
+        // 고개 방향이 아니라 ObstacleSpawner 오브젝트의 방향 기준
+        Vector3 behindDirection = -transform.forward;
 
-        GameObject obstacle =
-            Instantiate(
-                obstacleData.obstaclePrefab,
-                spawnPos,
-                Quaternion.identity
+        return target.position
+            + behindDirection * 6f
+            + new Vector3(
+                Random.Range(-0.5f, 0.5f),
+                Random.Range(0f, 0.7f),
+                0f
             );
+    }
+
+    private void PlayWarningSound(AudioClip clip, Vector3 position)
+    {
+        if (clip == null) return;
+
+        GameObject soundObject = new GameObject("WarningSound");
+        soundObject.transform.position = position;
+
+        AudioSource source = soundObject.AddComponent<AudioSource>();
+        source.clip = clip;
+        source.spatialBlend = 1f;
+        source.minDistance = 0.2f;
+        source.maxDistance = 8f;
+        source.rolloffMode = AudioRolloffMode.Linear;
+        source.playOnAwake = false;
+
+        source.Play();
+
+        Destroy(soundObject, clip.length + 0.2f);
+    }
+
+    private void SpawnObstacle(ObstacleData obstacleData, Vector3 spawnPos)
+    {
+        GameObject obstacle = Instantiate(
+            obstacleData.obstaclePrefab,
+            spawnPos,
+            Quaternion.identity
+        );
 
         Destroy(obstacle, 5f);
 
@@ -100,9 +114,7 @@ public class ObstacleSpawner : MonoBehaviour
             {
                 rb.useGravity = false;
 
-                Vector3 dir =
-                    (target.position - spawnPos).normalized;
-
+                Vector3 dir = (target.position - spawnPos).normalized;
                 rb.linearVelocity = dir * flySpeed;
             }
         }
