@@ -1,6 +1,8 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -10,7 +12,16 @@ public class PlayerHealth : MonoBehaviour
     public Slider hpSlider;
     public TextMeshProUGUI hpValueText;
     public GameObject gameOverText;
+    public GameObject gameOverPanel;
     public ObstacleSpawner obstacleSpawner;
+
+    public Image damageFlashImage;
+    public float flashDuration = 0.2f;
+    public float flashAlpha = 0.4f;
+
+    public AudioSource audioSource;
+    public AudioClip damageSound;
+
 
     private void Start()
     {
@@ -21,7 +32,10 @@ public class PlayerHealth : MonoBehaviour
 
         if (gameOverText != null)
             gameOverText.SetActive(false);
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(false);
 
+        SetDamageFlashAlpha(0f);
         UpdateHPUI();
     }
 
@@ -30,12 +44,35 @@ public class PlayerHealth : MonoBehaviour
         currentHealth -= damage;
         currentHealth = Mathf.Max(currentHealth, 0);
 
+        if (audioSource != null && damageSound != null)
+        {
+            audioSource.PlayOneShot(damageSound);
+        }
+
+
         UpdateHPUI();
+        StartCoroutine(DamageFlash());
 
         if (currentHealth <= 0)
         {
             GameOver();
         }
+    }
+
+    private IEnumerator DamageFlash()
+    {
+        SetDamageFlashAlpha(flashAlpha);
+        yield return new WaitForSeconds(flashDuration);
+        SetDamageFlashAlpha(0f);
+    }
+
+    private void SetDamageFlashAlpha(float alpha)
+    {
+        if (damageFlashImage == null) return;
+
+        Color color = damageFlashImage.color;
+        color.a = alpha;
+        damageFlashImage.color = color;
     }
 
     private void UpdateHPUI()
@@ -52,8 +89,10 @@ public class PlayerHealth : MonoBehaviour
 
         if (gameOverText != null)
             gameOverText.SetActive(true);
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(true);
 
         if (obstacleSpawner != null)
-            obstacleSpawner.enabled = false;
+            obstacleSpawner.StopSpawning();
     }
 }

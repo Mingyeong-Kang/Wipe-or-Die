@@ -119,4 +119,17 @@ public class ObstacleSpawner : MonoBehaviour
             }
         }
     }
+
+    public void StopSpawning()
+    {
+        CancelInvoke();
+        StopAllCoroutines();
+
+        GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
+
+        foreach (GameObject obstacle in obstacles)
+        {
+            Destroy(obstacle);
+        }
+    }
 }
