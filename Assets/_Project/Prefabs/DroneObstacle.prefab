@@ -33,7 +33,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 1.5, z: 0.8}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6529753102720320976}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6715166018964089181
@@ -51,7 +52,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8172774494997758288}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -156,3 +157,81 @@ MonoBehaviour:
   damage: 10
   hapticAmplitude: 0.5
   hapticDuration: 0.15
+  hitEffectPrefab: {fileID: 6617363572471837470, guid: 840075c859be6e64f9fcaa4624cd3665, type: 3}
+  hitSound: {fileID: 8300000, guid: 38177112c919fff4598e7505bfb62e36, type: 3}
+--- !u!1001 &6707248136158126651
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1461441217963165118}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 74ecdf723bb510e4987eac91355e0615, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.027
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 74ecdf723bb510e4987eac91355e0615, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.027
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 74ecdf723bb510e4987eac91355e0615, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.027
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 74ecdf723bb510e4987eac91355e0615, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.017
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 74ecdf723bb510e4987eac91355e0615, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.046
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 74ecdf723bb510e4987eac91355e0615, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.138
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 74ecdf723bb510e4987eac91355e0615, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 74ecdf723bb510e4987eac91355e0615, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 74ecdf723bb510e4987eac91355e0615, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 74ecdf723bb510e4987eac91355e0615, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 74ecdf723bb510e4987eac91355e0615, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 74ecdf723bb510e4987eac91355e0615, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 74ecdf723bb510e4987eac91355e0615, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 74ecdf723bb510e4987eac91355e0615, type: 3}
+      propertyPath: m_Name
+      value: droneAsset
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects:
+    - {fileID: 65702495048144492, guid: 74ecdf723bb510e4987eac91355e0615, type: 3}
+    - {fileID: -8700617353114198275, guid: 74ecdf723bb510e4987eac91355e0615, type: 3}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 74ecdf723bb510e4987eac91355e0615, type: 3}
+--- !u!4 &6529753102720320976 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 74ecdf723bb510e4987eac91355e0615, type: 3}
+  m_PrefabInstance: {fileID: 6707248136158126651}
+  m_PrefabAsset: {fileID: 0}

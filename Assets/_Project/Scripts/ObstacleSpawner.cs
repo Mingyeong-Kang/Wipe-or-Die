@@ -18,21 +18,34 @@ public enum ObstacleType
 public class ObstacleSpawner : MonoBehaviour
 {
     public Transform target;
-    public float spawnInterval = 3f;
-    public float warningDelay = 0.8f;
+
+    // 랜덤 생성 간격
+    public float minSpawnInterval = 7f;
+    public float maxSpawnInterval = 15f;
+
+    public float warningDelay = 1.2f;
     public float spawnHeight = 2f;
-    public float flySpeed = 2f;
+    public float flySpeed = 1.5f;
 
     public ObstacleData[] obstacles;
 
     private void Start()
     {
-        InvokeRepeating(nameof(StartSpawnSequence), 1f, spawnInterval);
+        ScheduleNextSpawn();
+    }
+
+    private void ScheduleNextSpawn()
+    {
+        float nextTime = Random.Range(minSpawnInterval, maxSpawnInterval);
+        Invoke(nameof(StartSpawnSequence), nextTime);
     }
 
     private void StartSpawnSequence()
     {
         StartCoroutine(SpawnSequence());
+
+        // 다음 장애물 생성 예약
+        ScheduleNextSpawn();
     }
 
     private IEnumerator SpawnSequence()
@@ -59,7 +72,7 @@ public class ObstacleSpawner : MonoBehaviour
             );
         }
 
-        // 고개 방향이 아니라 ObstacleSpawner 오브젝트의 방향 기준
+        // 고개 방향이 아니라 ObstacleSpawner 오브젝트 방향 기준
         Vector3 behindDirection = -transform.forward;
 
         return target.position
