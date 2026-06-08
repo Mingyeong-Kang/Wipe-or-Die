@@ -8,6 +8,9 @@ public class ObstacleHit : MonoBehaviour
     public float hapticAmplitude = 0.5f;
     public float hapticDuration = 0.15f;
 
+    public GameObject hitEffectPrefab;
+    public AudioClip hitSound;
+
     private void Update()
     {
         if (transform.position.y < -10f)
@@ -24,9 +27,13 @@ public class ObstacleHit : MonoBehaviour
                 other.GetComponentInParent<HapticImpulsePlayer>();
 
             if (haptic != null)
-            {
                 haptic.SendHapticImpulse(hapticAmplitude, hapticDuration);
-            }
+
+            if (hitEffectPrefab != null)
+                Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
+
+            if (hitSound != null)
+                AudioSource.PlayClipAtPoint(hitSound, transform.position);
 
             Destroy(gameObject);
             return;
