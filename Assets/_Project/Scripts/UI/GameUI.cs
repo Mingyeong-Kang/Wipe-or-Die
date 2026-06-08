@@ -1,9 +1,11 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 /// <summary>
 /// HP, 점수, 콤보, GameOver, LevelClear UI를 한 곳에서 업데이트.
 /// World Space Canvas를 XR Origin 앞에 배치 권장 (VR HUD).
+/// 팀 UI 컬러: RED #FF0000 / BLUE #0C00CC / Font: 기본, Bold, Uppercase
 /// </summary>
 public class GameUI : MonoBehaviour
 {
@@ -18,6 +20,10 @@ public class GameUI : MonoBehaviour
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject levelClearPanel;
     [SerializeField] private TextMeshProUGUI finalScoreText;
+
+    // 팀 결정 색상: RED #FF0000 / BLUE #0C00CC
+    private static readonly Color UIRed = new Color(1f, 0f, 0f);
+    private static readonly Color UIBlue = new Color(0.047f, 0f, 0.8f);
 
     private void Awake()
     {
