@@ -1,0 +1,4 @@
+*.unity filter=lfs diff=lfs merge=lfs -text
+*.prefab filter=lfs diff=lfs merge=lfs -text
+*.asset filter=lfs diff=lfs merge=lfs -text
+Assets/Triangularity/** filter=lfs diff=lfs merge=lfs -text
