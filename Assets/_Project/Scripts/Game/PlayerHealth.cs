@@ -42,7 +42,10 @@ public class PlayerHealth : MonoBehaviour
         OnHealthChanged?.Invoke(_currentHealth, maxHealth);
 
         if (IsDead)
+        {
+            GameUI.Instance?.ShowGameOver();
             OnDeath?.Invoke();
+        }
     }
 
     public void Heal(int amount)
