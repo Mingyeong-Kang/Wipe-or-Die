@@ -17,7 +17,7 @@ public class StartSceneManager : MonoBehaviour
 
     public void OnClickTutorial()
     {
-        SceneManager.LoadScene("Tutorial");
+        SceneManager.LoadScene("TUTORIAL");
     }
 
     public void OnClickClose()

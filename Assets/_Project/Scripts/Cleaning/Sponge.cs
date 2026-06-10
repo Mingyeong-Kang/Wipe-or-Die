@@ -24,6 +24,10 @@ public class Sponge : MonoBehaviour
 
     private void Awake()
     {
+        // 창문과 OnTriggerEnter가 동작하려면 isTrigger 필요
+        var col = GetComponent<Collider>();
+        if (col != null) col.isTrigger = true;
+
         _grab = GetComponent<XRGrabInteractable>();
         _grab.selectEntered.AddListener(_ =>
         {

@@ -25,17 +25,34 @@ public class CleaningManager : MonoBehaviour
 
     private void Start()
     {
-        _cleanedCount = 0;
-        foreach (var w in windows)
-            w.OnCleaned += HandleWindowCleaned;
+        // LevelManager가 있으면 SetWindows()로 구독 처리 — 여기서 하면 이중 구독됨
+        if (LevelManager.Instance == null)
+            Subscribe(windows);
+        OnWindowProgress?.Invoke(0, windows.Length);
     }
 
-    private void OnDestroy()
+    private void OnDestroy() => Unsubscribe(windows);
+
+    // LevelManager가 레벨 전환 시 호출
+    public void SetWindows(Window[] newWindows)
     {
-        foreach (var w in windows)
-        {
+        Unsubscribe(windows);
+        windows = newWindows;
+        _cleanedCount = 0;
+        Subscribe(windows);
+        OnWindowProgress?.Invoke(0, windows.Length);
+    }
+
+    private void Subscribe(Window[] arr)
+    {
+        foreach (var w in arr)
+            if (w != null) w.OnCleaned += HandleWindowCleaned;
+    }
+
+    private void Unsubscribe(Window[] arr)
+    {
+        foreach (var w in arr)
             if (w != null) w.OnCleaned -= HandleWindowCleaned;
-        }
     }
 
     private void HandleWindowCleaned(Window window)

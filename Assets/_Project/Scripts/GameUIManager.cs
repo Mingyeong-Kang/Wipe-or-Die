@@ -10,12 +10,12 @@ public class GameUIManager : MonoBehaviour
 
     public void GoToMainMenu()
     {
-        SceneManager.LoadScene("MainMenuScene");
+        SceneManager.LoadScene("START");
     }
 
     public void StartGame()
     {
-        SceneManager.LoadScene("Test_Jiyeon");
+        SceneManager.LoadScene("MainScene");
     }
 
     public void QuitGame()

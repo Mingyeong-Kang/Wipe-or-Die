@@ -55,9 +55,11 @@ public class SprayBottle : MonoBehaviour
                 audioSource.PlayOneShot(sprayClip);
         }
 
-        // 노즐 앞 범위 내 창문 탐색
+        // 노즐 앞 범위 내 창문 탐색 (windowLayer 미설정 시 전체 레이어 fallback)
         Transform origin = nozzle != null ? nozzle : transform;
-        Collider[] hits = Physics.OverlapSphere(origin.position, sprayRadius, windowLayer);
+        Collider[] hits = windowLayer == 0
+            ? Physics.OverlapSphere(origin.position, sprayRadius)
+            : Physics.OverlapSphere(origin.position, sprayRadius, windowLayer);
         foreach (var hit in hits)
         {
             Window window = hit.GetComponent<Window>();
