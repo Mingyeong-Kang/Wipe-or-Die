@@ -19,7 +19,6 @@ public class ObstacleSpawner : MonoBehaviour
 {
     public Transform target;
 
-    // 랜덤 생성 간격
     public float minSpawnInterval = 7f;
     public float maxSpawnInterval = 15f;
 
@@ -28,6 +27,12 @@ public class ObstacleSpawner : MonoBehaviour
     public float flySpeed = 1.5f;
 
     public ObstacleData[] obstacles;
+
+    [Header("Spatial Warning Sound")]
+    public float soundLerpRatio = 0.6f;
+    public float soundVolume = 1f;
+    public float soundMinDistance = 3f;
+    public float soundMaxDistance = 40f;
 
     private void Start()
     {
@@ -43,19 +48,23 @@ public class ObstacleSpawner : MonoBehaviour
     private void StartSpawnSequence()
     {
         StartCoroutine(SpawnSequence());
-
-        // 다음 장애물 생성 예약
         ScheduleNextSpawn();
     }
 
     private IEnumerator SpawnSequence()
     {
+        if (target == null) yield break;
         if (obstacles == null || obstacles.Length == 0) yield break;
+
         ObstacleData selected = obstacles[Random.Range(0, obstacles.Length)];
+        if (selected.obstaclePrefab == null) yield break;
 
         Vector3 spawnPos = GetSpawnPosition(selected);
 
-        PlayWarningSound(selected.warningSound, spawnPos);
+        // 장애물 위치 그대로가 아니라, 플레이어와 장애물 사이에서 소리 재생
+        // 방향감은 살리고, 너무 멀어서 안 들리는 문제를 줄임
+        Vector3 soundPos = Vector3.Lerp(target.position, spawnPos, soundLerpRatio);
+        PlayWarningSound(selected.warningSound, soundPos);
 
         yield return new WaitForSeconds(warningDelay);
 
@@ -73,7 +82,6 @@ public class ObstacleSpawner : MonoBehaviour
             );
         }
 
-        // 고개 방향이 아니라 ObstacleSpawner 오브젝트 방향 기준
         Vector3 behindDirection = -transform.forward;
 
         return target.position
@@ -94,12 +102,15 @@ public class ObstacleSpawner : MonoBehaviour
 
         AudioSource source = soundObject.AddComponent<AudioSource>();
         source.clip = clip;
-        source.spatialBlend = 1f;
-        source.minDistance = 0.2f;
-        source.maxDistance = 8f;
-        source.rolloffMode = AudioRolloffMode.Linear;
-        source.playOnAwake = false;
+        source.volume = soundVolume;
 
+        // VR 공간감 유지
+        source.spatialBlend = 1f;
+        source.minDistance = soundMinDistance;
+        source.maxDistance = soundMaxDistance;
+        source.rolloffMode = AudioRolloffMode.Logarithmic;
+
+        source.playOnAwake = false;
         source.Play();
 
         Destroy(soundObject, clip.length + 0.2f);
@@ -139,9 +150,9 @@ public class ObstacleSpawner : MonoBehaviour
         CancelInvoke();
         StopAllCoroutines();
 
-        GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
+        GameObject[] spawnedObstacles = GameObject.FindGameObjectsWithTag("Obstacle");
 
-        foreach (GameObject obstacle in obstacles)
+        foreach (GameObject obstacle in spawnedObstacles)
         {
             Destroy(obstacle);
         }
