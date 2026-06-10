@@ -20,7 +20,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private GameObject completePanel;
 
     [Header("Tutorial Window")]
-    [SerializeField] private GameObject tutorialWindow; // Window 스크립트 머지 후 Window 타입으로 변경
+    [SerializeField] private Window tutorialWindow;
 
     [Header("Obstacle")]
     [SerializeField] private ObstacleSpawner obstacleSpawner;
@@ -33,16 +33,14 @@ public class TutorialManager : MonoBehaviour
     private void Start()
     {
         ShowStep(TutorialStep.Move);
-        // TODO: Window 스크립트 머지 후 아래 주석 해제
-        // if (tutorialWindow != null)
-        //     tutorialWindow.OnCleaned += OnWindowCleaned;
+        if (tutorialWindow != null)
+            tutorialWindow.OnCleaned += OnWindowCleaned;
     }
 
     private void OnDestroy()
     {
-        // TODO: Window 스크립트 머지 후 아래 주석 해제
-        // if (tutorialWindow != null)
-        //     tutorialWindow.OnCleaned -= OnWindowCleaned;
+        if (tutorialWindow != null)
+            tutorialWindow.OnCleaned -= OnWindowCleaned;
     }
 
     // ── 패널 표시 ──────────────────────────────────────────
@@ -91,15 +89,7 @@ public class TutorialManager : MonoBehaviour
     }
 
     // ── 이벤트 ─────────────────────────────────────────────
-    // TODO: Window 스크립트 머지 후 활성화
-    // private void OnWindowCleaned(Window window)
-    // {
-    //     if (_currentStep != TutorialStep.Clean) return;
-    //     ShowStep(TutorialStep.Obstacle);
-    // }
-
-    /// <summary>창문 청소 완료 시 외부에서 호출 (Window 머지 전 임시)</summary>
-    public void OnWindowCleaned()
+    private void OnWindowCleaned(Window window)
     {
         if (_currentStep != TutorialStep.Clean) return;
         ShowStep(TutorialStep.Obstacle);

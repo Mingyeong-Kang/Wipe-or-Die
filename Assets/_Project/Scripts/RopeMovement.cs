@@ -11,17 +11,21 @@ public class RopeMovement : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 2f;
-    [SerializeField] private float minX = -5f;
-    [SerializeField] private float maxX = 5f;
+    [SerializeField] private float rangeHalfWidth = 4f; // 건물 중심 기준 ±범위(m)
 
     private XROrigin _xrOrigin;
+    private float _centerX = 0f; // 레벨 시작 시 SetCenter로 갱신
 
     private void Awake()
     {
         _xrOrigin = GetComponent<XROrigin>();
         if (_xrOrigin == null)
             _xrOrigin = FindFirstObjectByType<XROrigin>();
+        _centerX = _xrOrigin != null ? _xrOrigin.transform.position.x : 0f;
     }
+
+    /// LevelManager가 텔레포트 후 호출
+    public void SetCenter(float centerX) => _centerX = centerX;
 
     private void Update()
     {
@@ -36,8 +40,8 @@ public class RopeMovement : MonoBehaviour
         Vector3 move = new Vector3(horizontal * moveSpeed * Time.deltaTime, 0f, 0f);
         Vector3 newPos = _xrOrigin.transform.position + move;
 
-        // 범위 제한
-        newPos.x = Mathf.Clamp(newPos.x, minX, maxX);
+        // 건물 중심 기준 범위 제한
+        newPos.x = Mathf.Clamp(newPos.x, _centerX - rangeHalfWidth, _centerX + rangeHalfWidth);
         _xrOrigin.transform.position = newPos;
     }
 }

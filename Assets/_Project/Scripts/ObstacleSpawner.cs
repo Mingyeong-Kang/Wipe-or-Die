@@ -50,6 +50,7 @@ public class ObstacleSpawner : MonoBehaviour
 
     private IEnumerator SpawnSequence()
     {
+        if (obstacles == null || obstacles.Length == 0) yield break;
         ObstacleData selected = obstacles[Random.Range(0, obstacles.Length)];
 
         Vector3 spawnPos = GetSpawnPosition(selected);

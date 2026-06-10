@@ -56,7 +56,9 @@ public class WaterSpray : MonoBehaviour
         }
 
         Transform origin = nozzle != null ? nozzle : transform;
-        Collider[] hits = Physics.OverlapSphere(origin.position, sprayRadius, windowLayer);
+        Collider[] hits = windowLayer == 0
+            ? Physics.OverlapSphere(origin.position, sprayRadius)
+            : Physics.OverlapSphere(origin.position, sprayRadius, windowLayer);
         foreach (var hit in hits)
         {
             Window window = hit.GetComponent<Window>();

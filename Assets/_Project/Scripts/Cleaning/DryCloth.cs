@@ -24,6 +24,9 @@ public class DryCloth : MonoBehaviour
 
     private void Awake()
     {
+        var col = GetComponent<Collider>();
+        if (col != null) col.isTrigger = true;
+
         _grab = GetComponent<XRGrabInteractable>();
         _grab.selectEntered.AddListener(_ =>
         {
